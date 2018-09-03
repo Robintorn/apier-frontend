@@ -24,7 +24,13 @@ function getProducts() {
               <p class="card-text">${product.name}</p>
               <p class="card-text">${product.description}</p>
               <p class="card-text" style="color: grey;">${product._id}</p>
-              <button type="button" class="btn btn-danger">Delete</button>
+              <button type="button" id="edit" class="btn btn-secondary">Edit</button>
+              <div id="editProduct" style="margin-top: 1em; display: none;">
+              <input id="editProductName" placeholder="edit productname" type="text" />
+              <br />
+              <br />
+              <input id="editProductDescription" placeholder="edit productdescription" type="text" />
+              </div>
             </div>
           </div>
           </div>
@@ -68,6 +74,11 @@ function submitProduct(e) {
     .catch((err) => console.log(err))
 }
 
+function editProduct(e) {    
+    document.getElementById('editProduct').style.display = 'block';
+}
+
 document.getElementById('get').addEventListener('click', getProducts);
 document.getElementById('addProduct').addEventListener('click', initProductForm);
 document.getElementById('addProductForm').addEventListener('submit', submitProduct);
+document.getElementById('edit').addEventListener('click', editProduct);
