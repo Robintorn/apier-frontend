@@ -77,6 +77,20 @@ function getProducts() {
                     .catch((err) => console.log(err))
                 }
             })
+
+            $(document).on('click', `.delete${i}`, function(){
+                fetch(`http://localhost:3001/api/products/${data[i]._id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json; test/plain */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({_id: data[i]._id})
+                })
+                .then(response => response.json())
+                .then(datat => console.log(datat))
+                .catch((err) => console.log(err))
+            });
             }
         });
         }
