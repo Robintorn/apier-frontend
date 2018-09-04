@@ -18,7 +18,7 @@ function getProducts() {
         data.forEach((product, index) => {
             output2 += 
             `
-            <div class="card-deck col-12 col-sm-6 col-lg-4 mb-4">
+            <div class="removeCard${index} card-deck col-12 col-sm-6 col-lg-4 mb-4">
             <div class="card">
             <div class="card-body">
               <p class="updateName${index} card-text">${product.name}</p>
@@ -79,6 +79,8 @@ function getProducts() {
             })
 
             $(document).on('click', `.delete${i}`, function(){
+                $(`.removeCard${i}`).remove();
+
                 fetch(`http://localhost:3001/api/products/${data[i]._id}`, {
                     method: 'DELETE',
                     headers: {
@@ -87,8 +89,6 @@ function getProducts() {
                     },
                     body: JSON.stringify({_id: data[i]._id})
                 })
-                .then(response => response.json())
-                .then(datat => console.log(datat))
                 .catch((err) => console.log(err))
             });
             }
