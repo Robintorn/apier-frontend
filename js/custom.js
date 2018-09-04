@@ -15,27 +15,69 @@ function getProducts() {
             `;
         }else {
             
-        data.forEach((product) => {
+        data.forEach((product, index) => {
             output2 += 
             `
             <div class="card-deck col-12 col-sm-6 col-lg-4 mb-4">
             <div class="card">
             <div class="card-body">
-              <p class="card-text">${product.name}</p>
-              <p class="card-text">${product.description}</p>
+              <p class="updateName${index} card-text">${product.name}</p>
+              <p class="updateDescription${index} card-text">${product.description}</p>
               <p class="card-text" style="color: grey;">${product._id}</p>
-              <button type="button" id="edit" class="btn btn-secondary">Edit</button>
-              <div id="editProduct" style="margin-top: 1em; display: none;">
-              <input id="editProductName" placeholder="edit productname" type="text" />
+              <button class="edit${index} btn btn-secondary">Edit</button>
               <br />
               <br />
-              <input id="editProductDescription" placeholder="edit productdescription" type="text" />
+              <div class="editProduct${index}" style="margin-bottom: 1em; display: none;">
+                <input type="text" class="editProductName${index}" />
+                <br />
+                <br />
+                <input type="text" class="editProductDescription${index}" />
+                <br />
+                <br />
+                <button class="sendProductEdit${index}" btn btn-primary">Submit</button>
+                <br />
+                <br />
+                <p class="CheckPrompt${index}" style="display: none;"></p>
               </div>
             </div>
           </div>
           </div>
             `;
-        });   
+        })
+
+        $( document ).ready(function() {
+            for(let i in data) {
+                $(document).on('click', `.edit${i}`, function(){
+                    $(`.editProduct${i}`).css('display', 'block');
+                });
+
+            $(document).on('click', `.sendProductEdit${i}`, function() {
+                let name = $(`.editProductName${i}`).val();
+                let description = $(`.editProductDescription${i}`).val();
+                if(name.length === 0 && description.length === 0) {
+                    show(`.CheckPrompt${i}`);
+                    wrightMessage("Fyll i fälten", `.CheckPrompt${i}`, "red");
+                    setTimeout(function(){hide(`.CheckPrompt${i}`);}, 2000)
+                }else {
+                    $(`.editProduct${i}`).css('display', 'none');
+                    fetch(`http://localhost:3001/api/products/${data[i]._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Accept': 'application/json; test/plain */*',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({_id: data[i]._id, name: name, description: description})
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        $(`.updateName${i}`).html(name);
+                        $(`.updateDescription${i}`).html(description);
+                    })
+                    .catch((err) => console.log(err))
+                }
+            })
+            }
+        });
         }
       
         document.getElementById('output').innerHTML = output;
@@ -74,11 +116,23 @@ function submitProduct(e) {
     .catch((err) => console.log(err))
 }
 
-function editProduct(e) {    
-    document.getElementById('editProduct').style.display = 'block';
-}
-
 document.getElementById('get').addEventListener('click', getProducts);
 document.getElementById('addProduct').addEventListener('click', initProductForm);
 document.getElementById('addProductForm').addEventListener('submit', submitProduct);
-document.getElementById('edit').addEventListener('click', editProduct);
+
+/*Show*/
+function show(classname){
+    $( classname ).css("display","block");
+}
+/*hide*/
+function hide(classname){
+    $( classname ).css("display","none");
+}
+
+/*wrightMessage*/
+function wrightMessage(message, messageLocation, color, borderLocation , borderLocation2){
+    $(messageLocation).html(message);
+    $(messageLocation).css("color",color);
+    $(borderLocation).css("border-color",color);
+    $(borderLocation2).css("border-color",color);
+}
