@@ -25,6 +25,7 @@ function getProducts() {
               <p class="updateDescription${index} card-text">${product.description}</p>
               <p class="card-text" style="color: grey;">${product._id}</p>
               <button class="edit${index} btn btn-secondary">Edit</button>
+              <button class="delete${index} btn btn-danger">Delete</button>
               <br />
               <br />
               <div class="editProduct${index}" style="margin-bottom: 1em; display: none;">
