@@ -1,5 +1,4 @@
 function getProducts() {
-
     document.getElementById("addProductForm").style.display = 'none';
 
     fetch('http://localhost:3001/api/products')
@@ -65,7 +64,8 @@ function getProducts() {
                         method: 'PUT',
                         headers: {
                             'Accept': 'application/json; test/plain */*',
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${document.getElementById('tokenStorage').innerHTML}`
                         },
                         body: JSON.stringify({_id: data[i]._id, name: name, description: description})
                     })
@@ -85,7 +85,8 @@ function getProducts() {
                     method: 'DELETE',
                     headers: {
                         'Accept': 'application/json; test/plain */*',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${document.getElementById('tokenStorage').innerHTML}`
                     },
                     body: JSON.stringify({_id: data[i]._id})
                 })
@@ -119,7 +120,8 @@ function submitProduct(e) {
         method: 'POST',
         headers: {
             'Accept': 'application/json; test/plain */*',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${document.getElementById('tokenStorage').innerHTML}`
         },
         body: JSON.stringify({name: name, description: description})
     })
